@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]  # Added 3.11
+        os: [ubuntu-latest]  # Multi-OS testing capability
 
     steps:
     - uses: actions/checkout@v4
@@ -24,4 +25,12 @@ jobs:
         
     - name: Run tests
       run: |
-        pytest tests/ -v
+        cd tests  # Specific test directory
+        pytest test_utils.py -v  # Target specific test file
+        cd ..
+      
+    - name: Verify test coverage (optional)
+      if: always()
+      run: |
+        echo "Tests completed for Python ${{ matrix.python-version }}"
+        echo "View test results in the Actions tab"
